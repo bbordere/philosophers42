@@ -20,6 +20,12 @@
 # include <sys/time.h>
 # include <time.h>
 
+# define BLUE "\033[0;34m"
+# define GREEN "\033[0;32m"
+# define YELLOW "\033[0;33m"
+# define NEUTRAL "\033[0m"
+# define PURPLE "\033[0;35m"
+
 typedef struct s_philo
 {
 	int				l_fork;
@@ -38,7 +44,7 @@ typedef struct s_env
 	int				time_eat;
 	int				time_sleep;
 	int				nb_dead;
-	int				state_eating;
+	int				all_ate;
 	int				nb_eat;
 	unsigned int	start_time;
 	pthread_mutex_t	eating;
