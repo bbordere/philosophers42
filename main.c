@@ -67,8 +67,8 @@ t_env *ft_init_env(int ac, char **av)
 	env->forks = malloc(sizeof(pthread_mutex_t) * (env->nb_philo));
 	if (!env->forks)
 		return (ft_free_philo(env, env->philos));
-	ft_init_mutex(env);
 	ft_init_philo(env);
+	ft_init_mutex(env);
 	return (env);
 }
 
@@ -116,8 +116,8 @@ void	ft_eating(t_env	*env, t_philo *philo)
 		ft_print_logs(env, philo->id, BLUE"has taken a fork");
 	}
 	pthread_mutex_lock(&(env->eating));
-	ft_print_logs(env, philo->id, PURPLE"is eating");
 	philo->time_eat = ft_get_time();
+	ft_print_logs(env, philo->id, PURPLE"is eating");
 	pthread_mutex_unlock(&(env->eating));
 	philo->eat_counter++;
 	ft_opti_sleep(env, env->time_eat);
@@ -131,10 +131,8 @@ int			ft_check_all_ate(t_env *env, t_philo *philos)
 
 	i = -1;
 	while (++i < env->nb_philo)
-	{
 		if (philos[i].eat_counter != env->nb_eat)
 			return (0);
-	}
 	env->all_ate = 1;
 	return (1);
 }
@@ -152,13 +150,11 @@ void	ft_exit(t_env *env)
 	ft_free_philo(env, env->philos);	
 }
 
-void		ft_exit_threads();
-
 void		ft_check_conditions(t_env *env, t_philo *philos)
 {
 	int	i;
 
-	while (!ft_check_all_ate(env, philos)) //while(not all ate)
+	while (!ft_check_all_ate(env, philos))
 	{
 		i = -1;
 		while (!env->nb_dead && ++i < env->nb_philo)
@@ -186,7 +182,7 @@ void	*ft_actions(void *philo_v)
 	env = philo->env;
 	philo->time_eat = ft_get_time();
 	if (philo->id % 2)
-		ft_opti_sleep(env, 15);
+		ft_opti_sleep(env, env->time_eat);
 	while(!env->nb_dead && !env->all_ate)
 	{
 		ft_eating(env, philo);
@@ -214,9 +210,25 @@ void	ft_create_threads(t_env *env)
 	ft_exit(env);
 }
 
+int	ft_check_args(int ac, char **av)
+{
+	int	i;
+
+	if (ac < 5 || ac > 6)
+		return (-1);
+	i = 0;
+	while (++i < ac)
+		if (atoi(av[i]) <= 0)
+			return (-1);
+	return (0);
+}
+
 int main(int ac, char **av)
 {
 	t_env	*env;
+
+	if (ft_check_args(ac, av) == -1)
+		return (1);
 	env = ft_init_env(ac, av);
 	if (!env)
 		return (1);
