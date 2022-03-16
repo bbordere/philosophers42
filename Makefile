@@ -14,7 +14,7 @@ INCLUDES = ./
 
 CC = gcc
 
-CFLAGS = -Wall -Wextra -Werror -I $(INCLUDES) -O3
+CFLAGS = -Wall -Wextra -Werror -I $(INCLUDES)
 
 SCRS = main.c
 

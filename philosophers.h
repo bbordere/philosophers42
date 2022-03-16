@@ -19,12 +19,21 @@
 # include <stdio.h>
 # include <sys/time.h>
 # include <time.h>
+# include <string.h>
 
-# define BLUE "\033[0;34m"
-# define GREEN "\033[0;32m"
-# define YELLOW "\033[0;33m"
-# define NEUTRAL "\033[0m"
-# define PURPLE "\033[0;35m"
+// # define BLUE "\033[0;34m"
+// # define GREEN "\033[0;32m"
+// # define YELLOW "\033[0;33m"
+// # define NEUTRAL "\033[0m"
+// # define PURPLE "\033[0;35m"
+
+# define BLUE ""
+# define GREEN ""
+# define YELLOW ""
+# define NEUTRAL ""
+# define PURPLE ""
+
+int		ft_printf(char *str, ...);
 
 typedef struct s_philo
 {
@@ -40,6 +49,7 @@ typedef struct s_philo
 typedef struct s_env
 {
 	int				nb_philo;
+	int				starting;
 	int				time_die;
 	int				time_eat;
 	int				time_sleep;

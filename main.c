@@ -23,6 +23,7 @@ void	ft_init_philo(t_env *env)
 		env->philos[i].l_fork = i;
 		env->philos[i].r_fork = (env->philos[i].id + 1) % env->nb_philo;
 		env->philos[i].env = env;
+		env->philos[i].eat_counter = 0;
 	}
 }
 
@@ -57,6 +58,7 @@ t_env *ft_init_env(int ac, char **av)
 	env->time_sleep = atoi(av[4]);
 	env->nb_dead = 0;
 	env->all_ate = 0;
+	env->starting = 0;
 	if (ac == 6)
 		env->nb_eat = atoi(av[5]);
 	else
@@ -85,13 +87,14 @@ void		ft_opti_sleep(t_env *env, unsigned int duration)
 
 	t = ft_get_time();
 	while (!env->nb_dead && ft_get_time() - t < duration)
-		usleep(20);
+		usleep(1);
 }
 
 void	ft_print_logs(t_env *env, int philo_id, char *msg)
 {
 	if (env->nb_dead || env->all_ate)
-		return ;
+		// return ;
+		exit(1);
 	pthread_mutex_lock(&(env->printing));
 	printf("%s%u%s %d %s\n", YELLOW, ft_get_time() - env->start_time, NEUTRAL, philo_id + 1, msg);
 	pthread_mutex_unlock(&(env->printing));
@@ -100,7 +103,8 @@ void	ft_print_logs(t_env *env, int philo_id, char *msg)
 void	ft_eating(t_env	*env, t_philo *philo)
 {
 	if (env->nb_dead)
-		return ;
+		// return ;
+		exit(1);
 	if (philo->r_fork < philo->l_fork)
 	{
 		pthread_mutex_lock(&(env->forks[philo->r_fork]));
@@ -177,10 +181,9 @@ void	*ft_actions(void *philo_v)
 {
 	t_philo	*philo;
 	t_env	*env;
-
+	
 	philo = (t_philo *)philo_v;
 	env = philo->env;
-	philo->time_eat = ft_get_time();
 	if (philo->id % 2)
 		ft_opti_sleep(env, env->time_eat);
 	while(!env->nb_dead && !env->all_ate)
@@ -189,6 +192,7 @@ void	*ft_actions(void *philo_v)
 		ft_print_logs(env, philo->id, GREEN"is sleeping");
 		ft_opti_sleep(env, env->time_sleep);
 		ft_print_logs(env, philo->id, GREEN"is thinking");
+		// ft_opti_sleep(env, env->time_die - env->time_sleep - env->time_eat);
 	}
 	return (NULL);
 }
@@ -202,7 +206,10 @@ void	ft_create_threads(t_env *env)
 	env->start_time = ft_get_time();
 	i = -1;
 	while (++i < env->nb_philo)
+	{
 		pthread_create(&(philos[i].t_id), NULL, ft_actions, &(philos[i]));
+		philos[i].time_eat = ft_get_time();
+	}
 	ft_check_conditions(env, philos);
 	i = -1;
 	while (++i < env->nb_philo)
