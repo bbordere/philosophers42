@@ -93,40 +93,56 @@ void		ft_opti_sleep(t_env *env, unsigned int duration)
 void	ft_print_logs(t_env *env, int philo_id, char *msg)
 {
 	if (env->nb_dead || env->all_ate)
-		// return ;
-		exit(1);
+		return ;
 	pthread_mutex_lock(&(env->printing));
 	printf("%s%u%s %d %s\n", YELLOW, ft_get_time() - env->start_time, NEUTRAL, philo_id + 1, msg);
 	pthread_mutex_unlock(&(env->printing));
 }
 
+int	ft_take_right_fork(t_env *env, t_philo *philo)
+{
+	pthread_mutex_lock(&(env->forks[philo->r_fork]));
+	ft_print_logs(env, philo->id, BLUE"has taken a fork");
+	pthread_mutex_lock(&(env->forks[philo->l_fork]));
+	ft_print_logs(env, philo->id, BLUE"has taken a fork");
+	return (1);
+}
+
+int	ft_take_left_fork(t_env *env, t_philo *philo)
+{
+	pthread_mutex_lock(&(env->forks[philo->l_fork]));
+	ft_print_logs(env, philo->id, BLUE"has taken a fork");
+	pthread_mutex_lock(&(env->forks[philo->r_fork]));
+	ft_print_logs(env, philo->id, BLUE"has taken a fork");
+	return (2);
+}
+
 void	ft_eating(t_env	*env, t_philo *philo)
 {
+	int	fork;
+
 	if (env->nb_dead)
-		// return ;
-		exit(1);
+		return ;
 	if (philo->r_fork < philo->l_fork)
-	{
-		pthread_mutex_lock(&(env->forks[philo->r_fork]));
-		ft_print_logs(env, philo->id, BLUE"has taken a fork");
-		pthread_mutex_lock(&(env->forks[philo->l_fork]));
-		ft_print_logs(env, philo->id, BLUE"has taken a fork");
-	}
+		fork = ft_take_right_fork(env, philo);
 	else
-	{
-		pthread_mutex_lock(&(env->forks[philo->l_fork]));
-		ft_print_logs(env, philo->id, BLUE"has taken a fork");
-		pthread_mutex_lock(&(env->forks[philo->r_fork]));
-		ft_print_logs(env, philo->id, BLUE"has taken a fork");
-	}
+		fork = ft_take_left_fork(env, philo);
 	pthread_mutex_lock(&(env->eating));
 	philo->time_eat = ft_get_time();
 	ft_print_logs(env, philo->id, PURPLE"is eating");
 	pthread_mutex_unlock(&(env->eating));
 	philo->eat_counter++;
 	ft_opti_sleep(env, env->time_eat);
-	pthread_mutex_unlock(&(env->forks[philo->l_fork]));
-	pthread_mutex_unlock(&(env->forks[philo->r_fork]));
+	if (fork == 1)
+	{
+		pthread_mutex_unlock(&(env->forks[philo->l_fork]));
+		pthread_mutex_unlock(&(env->forks[philo->r_fork]));
+	}
+	else
+	{
+		pthread_mutex_unlock(&(env->forks[philo->r_fork]));
+		pthread_mutex_unlock(&(env->forks[philo->l_fork]));
+	}
 }
 
 int			ft_check_all_ate(t_env *env, t_philo *philos)
@@ -166,6 +182,7 @@ void		ft_check_conditions(t_env *env, t_philo *philos)
 			pthread_mutex_lock(&(env->eating));
 			if (ft_get_time() - philos[i].time_eat > (unsigned int)env->time_die)
 			{
+				usleep(5000);
 				ft_print_logs(env, philos[i].id, "died");
 				env->nb_dead++;
 			}
@@ -189,6 +206,8 @@ void	*ft_actions(void *philo_v)
 	while(!env->nb_dead && !env->all_ate)
 	{
 		ft_eating(env, philo);
+		if (ft_check_all_ate(env, env->philos))
+			break ;
 		ft_print_logs(env, philo->id, GREEN"is sleeping");
 		ft_opti_sleep(env, env->time_sleep);
 		ft_print_logs(env, philo->id, GREEN"is thinking");
