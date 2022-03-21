@@ -19,12 +19,12 @@ t_args	*ft_init_args(int ac, char **av)
 	args = malloc(sizeof(t_args));
 	if (!args)
 		return (NULL);
-	args->nb_philo = ft_atoi(av[1]);
-	args->time_die = (unsigned long)ft_atoi(av[2]);
-	args->time_eat = (unsigned long)ft_atoi(av[3]);
-	args->time_sleep = (unsigned long)ft_atoi(av[4]);
+	args->nb_philo = ft_atoll(av[1]);
+	args->time_die = (unsigned long)ft_atoll(av[2]);
+	args->time_eat = (unsigned long)ft_atoll(av[3]);
+	args->time_sleep = (unsigned long)ft_atoll(av[4]);
 	if (ac == 6)
-		args->nb_eat = ft_atoi(av[5]);
+		args->nb_eat = ft_atoll(av[5]);
 	else
 		args->nb_eat = -1;
 	return (args);

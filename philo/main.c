@@ -36,8 +36,14 @@ int	main(int ac, char **av)
 	t_args	*args;
 	t_env	*env;
 
+	if (!ft_check_args(ac, av))
+		return (1);
 	args = ft_init_args(ac, av);
+	if (!args)
+		return (1);
 	env = ft_init_env(args);
+	if (!env)
+		return (1);
 	ft_create_threads(env);
 	return (0);
 }

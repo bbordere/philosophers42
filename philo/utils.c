@@ -19,11 +19,11 @@ int	ft_isdigit(int c)
 	return (0);
 }
 
-int	ft_atoi(char *str)
+long long	ft_atoll(char *str)
 {
-	int	i;
-	int	res;
-	int	s;
+	int			i;
+	long long	res;
+	long long	s;
 
 	i = 0;
 	s = 1;
@@ -51,7 +51,7 @@ int	ft_strcmp(char *s1, char *s2)
 	int	i;
 
 	i = 0;
-	while (s1[i] == s2[i] && s1[i] && s2[i])
+	while (s1[i] && s2[i] && s1[i] == s2[i])
 		i++;
 	return (s1[i] - s2[i]);
 }
@@ -59,7 +59,7 @@ int	ft_strcmp(char *s1, char *s2)
 void	ft_print_logs(t_philo *philo, char *msg)
 {
 	pthread_mutex_lock(&(philo->env->death));
-	if (philo->env->monitor->dead && ft_strcmp(msg, "die"))
+	if (philo->env->monitor->dead && ft_strcmp(msg, "died"))
 	{
 		pthread_mutex_unlock(&(philo->env->death));
 		return ;

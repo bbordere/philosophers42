@@ -18,8 +18,10 @@
 # include <unistd.h>
 # include <stdio.h>
 # include <sys/time.h>
-# include <time.h>
 # include <string.h>
+
+# define MAX_INT 2147483647
+# define MIN_INT -2147483648
 
 typedef struct s_args
 {
@@ -74,8 +76,11 @@ void			*ft_life(void *philo_v);
 void			*ft_monitor(void *env_v);
 void			ft_opti_sleep(unsigned long duration);
 unsigned long	ft_get_time(void);
+int				ft_isdigit(int c);
 void			*ft_free_struct(t_env *env);
 void			ft_exit(t_env *env);
-int				ft_atoi(char *str);
+long long		ft_atoll(char *str);
 void			ft_print_logs(t_philo *philo, char *msg);
+int				ft_check_args(int ac, char **av);
+
 #endif

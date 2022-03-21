@@ -16,7 +16,7 @@ CC = gcc
 
 CFLAGS = -Wall -Wextra -Werror -I $(INCLUDES) -O3
 
-SCRS = main.c init.c routine.c monitor.c time.c exit.c utils.c
+SCRS = main.c init.c routine.c monitor.c time.c exit.c utils.c parsing.c
 
 OBJS = $(SCRS:.c=.o)
 
