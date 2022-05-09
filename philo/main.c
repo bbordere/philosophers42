@@ -27,7 +27,7 @@ void	ft_create_threads(t_env *env)
 		philos[i].last_eat = start;
 		pthread_create(&(philos[i].t_id), NULL, &ft_life, &philos[i]);
 	}
-	pthread_create(&env->monitor->t_id, NULL, ft_monitor, env);
+	pthread_create(&env->monitor->t_id, NULL, &ft_monitor, env);
 	ft_exit(env);
 }
 

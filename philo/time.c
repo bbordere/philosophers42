@@ -24,6 +24,8 @@ void	ft_opti_sleep(unsigned long duration)
 {
 	unsigned long	t;
 
+	if (duration <= 0)
+		return ;
 	t = ft_get_time();
 	while (ft_get_time() - t < duration)
 		usleep(50);
