@@ -6,7 +6,7 @@
 #    By: bbordere <bbordere@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/10 11:42:56 by bbordere          #+#    #+#              #
-#    Updated: 2022/03/10 11:51:39 by bbordere         ###   ########.fr        #
+#    Updated: 2022/08/22 00:15:29 by bbordere         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,9 +14,9 @@ INCLUDES = ./includes
 
 CC = gcc
 
-CFLAGS = -Wall -Wextra -Werror -I $(INCLUDES) -O3
+CFLAGS = -Wall -Wextra -Werror -I $(INCLUDES)
 
-SCRS = main.c init.c routine.c monitor.c time.c exit.c utils.c parsing.c
+SCRS = main.c init.c routine.c monitor.c time.c exit.c utils.c parsing.c forks.c utils_routine.c
 
 OBJS = $(SCRS:.c=.o)
 
@@ -43,4 +43,3 @@ re: fclean all
 
 .PHONY: all clean fclean re
 
-.SILENT: $(OBJS)

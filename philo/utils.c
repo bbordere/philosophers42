@@ -58,13 +58,14 @@ int	ft_strcmp(char *s1, char *s2)
 
 void	ft_print_logs(t_philo *philo, char *msg)
 {
-	pthread_mutex_lock(&(philo->env->death));
-	if (philo->env->monitor->dead && ft_strcmp(msg, "died"))
+	if (philo->env->monitor->dead && !ft_strcmp(msg, "is eating"))
 	{
-		pthread_mutex_unlock(&(philo->env->death));
+		pthread_mutex_unlock(&(philo->env->forks[philo->l_fork]));
+		pthread_mutex_unlock(&(philo->env->forks[philo->r_fork]));
 		return ;
 	}
-	pthread_mutex_unlock(&(philo->env->death));
+	if (philo->env->monitor->dead && ft_strcmp(msg, "died"))
+		return ;
 	pthread_mutex_lock(&(philo->env->printing));
 	printf("%lu %d %s\n", ft_get_time() - philo->env->start,
 		philo->id + 1, msg);

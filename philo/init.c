@@ -42,6 +42,7 @@ void	ft_init_philo(t_env *env)
 		env->philos[i].r_fork = (env->philos[i].id + 1) % env->args->nb_philo;
 		env->philos[i].nb_eat = 0;
 		env->philos[i].env = env;
+		env->philos[i].last_eat = 0;
 	}	
 }
 
@@ -90,4 +91,6 @@ void	ft_init_mutex(t_env *env)
 	pthread_mutex_init(&(env->printing), NULL);
 	pthread_mutex_init(&(env->eating), NULL);
 	pthread_mutex_init(&(env->death), NULL);
+	pthread_mutex_init(&(env->strt), NULL);
+	pthread_mutex_init(&(env->last), NULL);
 }

@@ -23,7 +23,6 @@ unsigned long	ft_get_time(void)
 void	ft_opti_sleep(unsigned long duration)
 {
 	unsigned long	t;
-
 	if (duration <= 0)
 		return ;
 	t = ft_get_time();

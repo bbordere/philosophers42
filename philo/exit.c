@@ -20,11 +20,14 @@ void	ft_exit(t_env *env)
 	pthread_join(env->monitor->t_id, NULL);
 	while (++i < env->args->nb_philo)
 		pthread_join(env->philos[i].t_id, NULL);
+	usleep(60000);
 	i = -1;
 	while (++i < env->args->nb_philo)
 		pthread_mutex_destroy(&(env->forks[i]));
 	pthread_mutex_destroy(&(env->printing));
 	pthread_mutex_destroy(&(env->eating));
+	pthread_mutex_destroy(&(env->strt));
+	pthread_mutex_destroy(&(env->death));
 	ft_free_struct(env);
 }
 

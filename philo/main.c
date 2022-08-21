@@ -12,6 +12,8 @@
 
 #include "philo.h"
 
+void	*ft_monitor(void *env_v);
+
 void	ft_create_threads(t_env *env)
 {
 	int				i;
@@ -20,13 +22,15 @@ void	ft_create_threads(t_env *env)
 
 	i = -1;
 	start = ft_get_time();
+	pthread_mutex_lock(&(env->strt));
 	env->start = start;
+	pthread_mutex_unlock(&(env->strt));
 	philos = env->philos;
 	while (++i < env->args->nb_philo)
 	{
-		philos[i].last_eat = start;
 		pthread_create(&(philos[i].t_id), NULL, &ft_life, &philos[i]);
 	}
+	usleep(60000);
 	pthread_create(&env->monitor->t_id, NULL, &ft_monitor, env);
 	ft_exit(env);
 }
